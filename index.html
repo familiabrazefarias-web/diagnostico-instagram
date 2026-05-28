@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico do seu Instagram</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .card { background: #fff; border-radius: 16px; padding: 2rem; max-width: 480px; width: 100%; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: .5rem; color: #111; }
+  p.sub { font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 1.5rem; }
+  .inp-row { display: flex; gap: 8px; margin-bottom: .75rem; }
+  input[type=text] { flex: 1; height: 44px; padding: 0 14px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px; outline: none; }
+  input[type=text]:focus { border-color: #6c63ff; }
+  .btn { height: 44px; padding: 0 20px; border-radius: 10px; border: none; background: #6c63ff; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn:hover { background: #5a52e0; }
+  .btn-full { width: 100%; margin-top: .5rem; }
+  .step { display: none; }
+  .step.active { display: block; }
+  .loader { text-align: center; padding: 1.5rem 0; }
+  .bar-track { height: 6px; background: #eee; border-radius: 4px; overflow: hidden; margin: 1rem 0 .5rem; }
+  .bar-fill { height: 100%; background: #6c63ff; border-radius: 4px; width: 0; transition: width .1s linear; }
+  .load-msg { font-size: 13px; color: #888; }
+  .score-wrap { text-align: center; margin: 1rem 0 1.5rem; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; border: 6px solid #e24b4a; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+  .score-num { font-size: 36px; font-weight: 700; color: #e24b4a; }
+  .score-label { font-size: 11px; color: #aaa; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #fef2f2; color: #b91c1c; margin-bottom: 1rem; }
+  .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
+  .metric { background: #f9f9f9; border-radius: 10px; padding: 10px 12px; }
+  .metric-name { font-size: 11px; color: #888; margin-bottom: 6px; }
+  .metric-bar { height: 4px; background: #eee; border-radius: 2px; overflow: hidden; }
+  .metric-fill { height: 100%; background: #e24b4a; border-radius: 2px; }
+  .metric-val { font-size: 13px; font-weight: 600; color: #333; margin-top: 5px; }
+  .problems { margin-bottom: 1.25rem; }
+  .problem { display: flex; gap: 10px; padding: 10px; border: 1px solid #f0f0f0; border-radius: 10px; margin-bottom: 8px; }
+  .problem-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .problem-title { font-size: 13px; font-weight: 600; color: #222; margin-bottom: 2px; }
+  .problem-text { font-size: 12px; color: #666; line-height: 1.5; }
+  .cta { background: #f5f3ff; border-radius: 12px; padding: 1.25rem; }
+  .cta h3 { font-size: 16px; font-weight: 700; margin-bottom: .4rem; color: #111; }
+  .cta p { font-size: 13px; color: #555; margin-bottom: 1rem; line-height: 1.5; }
+  .form-fields { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .success { text-align: center; padding: 1rem 0; }
+  .success .icon { font-size: 48px; margin-bottom: 1rem; }
+  .handle-tag { font-size: 13px; color: #888; margin-bottom: 1rem; }
+  .handle-tag span { font-weight: 600; color: #333; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- PASSO 1: formulário inicial -->
+  <div class="step active" id="s0">
+    <p style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:.75rem">Diagnóstico gratuito</p>
+    <h1>Seu Instagram está gerando clientes?</h1>
+    <p class="sub">Cole seu @ abaixo e descubra seu score de estratégia em segundos.</p>
+    <div class="inp-row">
+      <input type="text" id="handle" placeholder="@seuperfil" />
+      <button class="btn" onclick="iniciar()">Analisar</button>
+    </div>
+    <p style="font-size:12px;color:#aaa">Grátis. Sem precisar de senha ou acesso à conta.</p>
+  </div>
+
+  <!-- PASSO 2: loading -->
+  <div class="step" id="s1">
+    <div class="loader">
+      <p style="font-size:15px;font-weight:600;color:#333;margin-bottom:.25rem">Analisando seu perfil...</p>
+      <p class="load-msg" id="load-msg">Verificando frequência de posts</p>
+      <div class="bar-track"><div class="bar-fill" id="bar"></div
