@@ -1,71 +1,354 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnóstico do seu Instagram</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-  .card { background: #fff; border-radius: 16px; padding: 2rem; max-width: 480px; width: 100%; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
-  h1 { font-size: 22px; font-weight: 700; margin-bottom: .5rem; color: #111; }
-  p.sub { font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 1.5rem; }
-  .inp-row { display: flex; gap: 8px; margin-bottom: .75rem; }
-  input[type=text] { flex: 1; height: 44px; padding: 0 14px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px; outline: none; }
-  input[type=text]:focus { border-color: #6c63ff; }
-  .btn { height: 44px; padding: 0 20px; border-radius: 10px; border: none; background: #6c63ff; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; }
-  .btn:hover { background: #5a52e0; }
-  .btn-full { width: 100%; margin-top: .5rem; }
-  .step { display: none; }
-  .step.active { display: block; }
-  .loader { text-align: center; padding: 1.5rem 0; }
-  .bar-track { height: 6px; background: #eee; border-radius: 4px; overflow: hidden; margin: 1rem 0 .5rem; }
-  .bar-fill { height: 100%; background: #6c63ff; border-radius: 4px; width: 0; transition: width .1s linear; }
-  .load-msg { font-size: 13px; color: #888; }
-  .score-wrap { text-align: center; margin: 1rem 0 1.5rem; }
-  .score-circle { width: 110px; height: 110px; border-radius: 50%; border: 6px solid #e24b4a; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 1rem; }
-  .score-num { font-size: 36px; font-weight: 700; color: #e24b4a; }
-  .score-label { font-size: 11px; color: #aaa; }
-  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #fef2f2; color: #b91c1c; margin-bottom: 1rem; }
-  .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
-  .metric { background: #f9f9f9; border-radius: 10px; padding: 10px 12px; }
-  .metric-name { font-size: 11px; color: #888; margin-bottom: 6px; }
-  .metric-bar { height: 4px; background: #eee; border-radius: 2px; overflow: hidden; }
-  .metric-fill { height: 100%; background: #e24b4a; border-radius: 2px; }
-  .metric-val { font-size: 13px; font-weight: 600; color: #333; margin-top: 5px; }
-  .problems { margin-bottom: 1.25rem; }
-  .problem { display: flex; gap: 10px; padding: 10px; border: 1px solid #f0f0f0; border-radius: 10px; margin-bottom: 8px; }
-  .problem-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-  .problem-title { font-size: 13px; font-weight: 600; color: #222; margin-bottom: 2px; }
-  .problem-text { font-size: 12px; color: #666; line-height: 1.5; }
-  .cta { background: #f5f3ff; border-radius: 12px; padding: 1.25rem; }
-  .cta h3 { font-size: 16px; font-weight: 700; margin-bottom: .4rem; color: #111; }
-  .cta p { font-size: 13px; color: #555; margin-bottom: 1rem; line-height: 1.5; }
-  .form-fields { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
-  .success { text-align: center; padding: 1rem 0; }
-  .success .icon { font-size: 48px; margin-bottom: 1rem; }
-  .handle-tag { font-size: 13px; color: #888; margin-bottom: 1rem; }
-  .handle-tag span { font-weight: 600; color: #333; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico do seu Instagram</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 520px;
+      width: 100%;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 40px 36px;
+      backdrop-filter: blur(10px);
+    }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #e1306c, #f77737);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    h1 span { color: #e1306c; }
+    .subtitle {
+      color: rgba(255,255,255,0.6);
+      font-size: 15px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .input-group input {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .input-group input:focus { border-color: #e1306c; }
+    .input-group input::placeholder { color: rgba(255,255,255,0.35); }
+    .btn-analisar {
+      background: linear-gradient(90deg, #e1306c, #f77737);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .btn-analisar:hover { opacity: 0.85; }
+
+    /* Loading */
+    #loading { display: none; margin: 24px 0; }
+    .loading-bar-wrap {
+      background: rgba(255,255,255,0.08);
+      border-radius: 8px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .loading-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #e1306c, #f77737);
+      border-radius: 8px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .loading-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+    }
+
+    /* Resultado */
+    #resultado { display: none; margin-top: 24px; }
+    .score-box {
+      background: rgba(225, 48, 108, 0.12);
+      border: 1px solid rgba(225, 48, 108, 0.3);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .score-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #e1306c;
+      line-height: 1;
+    }
+    .score-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+    .score-msg {
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 10px;
+      color: #f77737;
+    }
+    .problemas {
+      margin-bottom: 20px;
+    }
+    .problemas h3 {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .problema-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .problema-item .icon { font-size: 16px; flex-shrink: 0; }
+
+    /* Formulário de captura */
+    #form-lead { display: none; margin-top: 24px; }
+    .form-lead-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .form-lead-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 18px;
+    }
+    .form-lead-title span { color: #e1306c; }
+    .field {
+      margin-bottom: 12px;
+    }
+    .field input {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .field input:focus { border-color: #e1306c; }
+    .field input::placeholder { color: rgba(255,255,255,0.35); }
+    .btn-receber {
+      width: 100%;
+      background: linear-gradient(90deg, #e1306c, #f77737);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: opacity 0.2s;
+    }
+    .btn-receber:hover { opacity: 0.85; }
+
+    /* Sucesso */
+    #sucesso {
+      display: none;
+      text-align: center;
+      padding: 30px 0 10px;
+    }
+    .sucesso-icon { font-size: 48px; margin-bottom: 16px; }
+    .sucesso-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .sucesso-sub { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    .privacy {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
 </head>
 <body>
-<div class="card">
+<div class="container">
+  <div class="card">
 
-  <!-- PASSO 1: formulário inicial -->
-  <div class="step active" id="s0">
-    <p style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:.75rem">Diagnóstico gratuito</p>
-    <h1>Seu Instagram está gerando clientes?</h1>
-    <p class="sub">Cole seu @ abaixo e descubra seu score de estratégia em segundos.</p>
-    <div class="inp-row">
-      <input type="text" id="handle" placeholder="@seuperfil" />
-      <button class="btn" onclick="iniciar()">Analisar</button>
+    <!-- Tela 1: Input do @ -->
+    <div id="tela-input">
+      <div class="badge">🔍 Diagnóstico Gratuito</div>
+      <h1>Seu Instagram está<br><span>perdendo clientes</span> todo dia?</h1>
+      <p class="subtitle">Cole o @ abaixo e descubra em segundos por que seu perfil não converte — e o que fazer para mudar isso.</p>
+      <div class="input-group">
+        <input type="text" id="ig-handle" placeholder="@seuperfil" />
+        <button class="btn-analisar" onclick="iniciarAnalise()">Analisar</button>
+      </div>
+      <p class="privacy">🔒 Analisamos apenas dados públicos. Nenhuma senha solicitada.</p>
     </div>
-    <p style="font-size:12px;color:#aaa">Grátis. Sem precisar de senha ou acesso à conta.</p>
-  </div>
 
-  <!-- PASSO 2: loading -->
-  <div class="step" id="s1">
-    <div class="loader">
-      <p style="font-size:15px;font-weight:600;color:#333;margin-bottom:.25rem">Analisando seu perfil...</p>
-      <p class="load-msg" id="load-msg">Verificando frequência de posts</p>
-      <div class="bar-track"><div class="bar-fill" id="bar"></div
+    <!-- Loading -->
+    <div id="loading">
+      <div class="loading-bar-wrap">
+        <div class="loading-bar" id="loading-bar"></div>
+      </div>
+      <p class="loading-text" id="loading-text">Analisando perfil...</p>
+    </div>
+
+    <!-- Resultado -->
+    <div id="resultado">
+      <div class="score-box">
+        <div class="score-num" id="score-num">23</div>
+        <div class="score-label">Score de estratégia (0–100)</div>
+        <div class="score-msg">⚠️ Seu perfil está deixando dinheiro na mesa</div>
+      </div>
+      <div class="problemas">
+        <h3>Problemas encontrados</h3>
+        <div class="problema-item"><span class="icon">❌</span><span>Posts sem chamada para ação — seus seguidores não sabem o que fazer depois de ver seu conteúdo.</span></div>
+        <div class="problema-item"><span class="icon">❌</span><span>Bio sem proposta de valor — visitantes saem sem entender o que você oferece.</span></div>
+        <div class="problema-item"><span class="icon">❌</span><span>Frequência inconsistente de publicações — o algoritmo está ignorando seu perfil.</span></div>
+        <div class="problema-item"><span class="icon">❌</span><span>Identidade visual sem padrão — passa falta de profissionalismo para potenciais clientes.</span></div>
+      </div>
+      <button class="btn-receber" onclick="mostrarFormLead()">Quero receber o plano de correção grátis →</button>
+    </div>
+
+    <!-- Formulário de Lead -->
+    <div id="form-lead">
+      <div class="form-lead-title">Receba seu <span>Plano de Correção</span> gratuito</div>
+      <div class="form-lead-sub">Vamos enviar um diagnóstico completo + estratégia personalizada direto no seu WhatsApp.</div>
+      <div class="field"><input type="text" id="lead-nome" placeholder="Seu nome" /></div>
+      <div class="field"><input type="tel" id="lead-whatsapp" placeholder="WhatsApp (com DDD)" /></div>
+      <button class="btn-receber" onclick="enviarLead()">📲 Enviar meu plano gratuitamente</button>
+      <p class="privacy">Sem spam. Seu contato fica seguro.</p>
+    </div>
+
+    <!-- Sucesso -->
+    <div id="sucesso">
+      <div class="sucesso-icon">🎉</div>
+      <div class="sucesso-title">Recebido!</div>
+      <p class="sucesso-sub">Em breve entraremos em contato no seu WhatsApp com o plano completo para transformar seu Instagram.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const MAKE_URL = "https://hook.us2.make.com/f8gkl79ooi62gmq4hfof89d270kyvtwr";
+
+  let igHandle = "";
+
+  function iniciarAnalise() {
+    igHandle = document.getElementById("ig-handle").value.trim();
+    if (!igHandle) { alert("Digite o @ do Instagram!"); return; }
+    if (!igHandle.startsWith("@")) igHandle = "@" + igHandle;
+
+    document.getElementById("tela-input").style.display = "none";
+    document.getElementById("loading").style.display = "block";
+
+    const steps = [
+      { pct: 20, txt: "Buscando perfil..." },
+      { pct: 45, txt: "Analisando frequência de posts..." },
+      { pct: 65, txt: "Verificando estratégia de conteúdo..." },
+      { pct: 85, txt: "Calculando score de conversão..." },
+      { pct: 100, txt: "Diagnóstico pronto!" }
+    ];
+
+    let i = 0;
+    const bar = document.getElementById("loading-bar");
+    const txt = document.getElementById("loading-text");
+
+    const interval = setInterval(() => {
+      if (i >= steps.length) {
+        clearInterval(interval);
+        setTimeout(() => {
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("resultado").style.display = "block";
+        }, 500);
+        return;
+      }
+      bar.style.width = steps[i].pct + "%";
+      txt.textContent = steps[i].txt;
+      i++;
+    }, 700);
+  }
+
+  function mostrarFormLead() {
+    document.getElementById("resultado").style.display = "none";
+    document.getElementById("form-lead").style.display = "block";
+  }
+
+  async function enviarLead() {
+    const nome = document.getElementById("lead-nome").value.trim();
+    const whatsapp = document.getElementById("lead-whatsapp").value.trim();
+
+    if (!nome || !whatsapp) { alert("Preencha seu nome e WhatsApp!"); return; }
+
+    const payload = {
+      instagram: igHandle,
+      nome: nome,
+      whatsapp: whatsapp,
+      data: new Date().toLocaleString("pt-BR")
+    };
+
+    try {
+      await fetch(MAKE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.log("Erro ao enviar:", e);
+    }
+
+    document.getElementById("form-lead").style.display = "none";
+    document.getElementById("sucesso").style.display = "block";
+  }
+</script>
+</body>
+</html>
